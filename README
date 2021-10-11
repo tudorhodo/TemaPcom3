@@ -1,0 +1,59 @@
+Protocoale de comunicatie - Tema3
+Client Web. Comunicatie cu REST API
+
+Student: Hodoboc-Velescu Tudor
+Grupa: 325CC
+Timp implementare: 4-5h
+Dificultate: usoara
+Testat pentru:
+-> username=pingutheunicorn
+-> password=123456
+
+Programul functioneaza dupa urmatorul principiu: acesta asteapta(la infinit)
+comenzi de la utilizator. Fiecare input este verificat si, daca este valid, se
+executa comanda data. Pentru input-ul de exit, se iese din loop si aplicatie
+se opreste. Pentru restul operatiilor, se creaza mesajul ce trebuie trimis la
+server, se deschide conexiunea la server, se trimite mesajul, se primeste
+raspunsul, se afiseaza si apoi se inchide conexiunea cu server-ul. Se deschide
+si inchide conexiunea la server pentru fiecare comanda deoarece este posibil ca
+pana la urmatoarea comanda sa se primeasca time-out la conexiune.
+
+requests.cpp
+Am folosit functiile date in laboratorul 10 ca punct de plecare pentru
+rezolvarea temei. Am modificat functiile pentru a adauga si token-ul pentru
+permisiunea modificarii bibliotecii. De asemenea, am adaugat si o functie pentru
+crearea unui request pentru cererile de tip DELETE. Aceasta creaza adauga metoda
+DELETE, host-ul si header-ul pentru token-ul de autorizatie.
+
+client.cpp
+Programul asteapta mesaje de la utliziator(stdin) la infinit intr-un loop.
+- Cand se primeste comanda de exit, se iese din loop si se inchide aplicatia.
+- Cand se primeste comanda de register, se preiau datele de la tastatura(username
+si password). Se elimina caracterul '\n' de la final si se creaza obiectul de
+tip json in care sunt stocate username-ul si parola. Se creaza o conexiune cu
+server-ul, se creaza mesajul de request si se trimite. Apoi se asteapta
+raspunsul, se afiseaza si se inchide conexiunea cu server-ul.
+- Cand se primeste comanda de login, se citesc username-ul si parola de la
+tastatura. Se elimina caracterul '\n' de la final si se creaza obiectul de tip
+json. Se creaza mesajul de request pentru server, se creaza conexiunea cu
+server-ul. Dupa se trimite mesajul, se asteapta raspunsul si se afiseaza. Daca
+cererea a avut succes, se salveaza cookie-ul pentru utilizatorul curent. La final,
+se inchide conexiune cu server-ul.
+- Cand se primeste comanda de enter_library, se creaza mesajul pentru server. Se
+deschide canalul de comunicatie cu server-ul, se trimite mesajul si se asteapta
+raspunsul din partea server-ului. Daca nu au fost probleme, se salveaza token-ul
+pentru permisiunea de a accesa biblioteca. Se afiseaza raspunsul si se inchide
+conexiune la server.
+- Cand se primeste comanda de get_books, se creaza mesajul pentru server, se
+deschide conexiunea la server, se trimite mesajul si se afiseaza raspunsul.
+- Cand se primeste comanda de get_book, se citeste id-ul, se creaza mesajul
+pentru server, se deschide conexiunea, se trimite mesajul si se afiseaza
+raspunsul.
+- Cand se primeste comanda add_book, se citesc datele despre carte, se creaza
+obiectul de tip json, se creaza mesajul catre server, se trimite si se afiseaza
+raspunsul.
+- Cand se primeste comanda delete_book, se citeste id-ul, se creaza mesajul
+pentru server, se trimite si se afiseaza raspunsul.
+- Cand se primeste comanda de logout, se creaza mesajul pentru server, se trimite
+request-ul la server si se afiseaza raspunsul. Se curata datele pentru cookies
+si autorizatii.
